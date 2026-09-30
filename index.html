@@ -1,0 +1,888 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Học Khẩu Ngữ: Môi Trường Sinh Thái</title>
+    <style>
+        :root {
+            --primary-color: #2e7d32;
+            --primary-light: #4caf50;
+            --bg-color: #f1f8e9;
+            --text-color: #333;
+            --white: #ffffff;
+            --border-color: #c8e6c9;
+            --hint-bg: #e8f5e9;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            margin: 0;
+            padding: 0;
+            line-height: 1.6;
+        }
+
+        header {
+            background-color: var(--primary-color);
+            color: var(--white);
+            text-align: center;
+            padding: 2rem 1rem;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+
+        header h1 {
+            margin: 0;
+            font-size: 2rem;
+        }
+
+        header h2 {
+            margin: 0.5rem 0 0;
+            font-weight: 400;
+            font-size: 1.2rem;
+            opacity: 0.9;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 2rem auto;
+            background: var(--white);
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            overflow: hidden;
+        }
+
+        /* Tabs Navigation */
+        .tabs {
+            display: flex;
+            background-color: var(--white);
+            border-bottom: 2px solid var(--border-color);
+        }
+
+        .tab-btn {
+            flex: 1;
+            padding: 1rem;
+            border: none;
+            background: none;
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: #666;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .tab-btn:hover {
+            background-color: var(--hint-bg);
+            color: var(--primary-color);
+        }
+
+        .tab-btn.active {
+            color: var(--primary-color);
+            border-bottom: 3px solid var(--primary-color);
+            background-color: var(--bg-color);
+        }
+
+        /* Tab Content */
+        .tab-content {
+            display: none;
+            padding: 2rem;
+        }
+
+        .tab-content.active {
+            display: block;
+            animation: fadeIn 0.4s ease-in-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Reading Section */
+        .reading-paragraph {
+            margin-bottom: 1.5rem;
+        }
+        
+        .speaker-name {
+            font-weight: bold;
+            color: var(--primary-color);
+            font-size: 1.1rem;
+            margin-bottom: 0.5rem;
+            border-left: 4px solid var(--primary-color);
+            padding-left: 10px;
+        }
+
+        .chinese-text {
+            font-size: 1.25rem;
+            line-height: 1.8;
+            text-align: justify;
+        }
+
+        /* Comprehension Section */
+        .question-card {
+            background: var(--white);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.02);
+        }
+
+        .question-text {
+            font-size: 1.2rem;
+            font-weight: bold;
+            margin-bottom: 1rem;
+            color: #222;
+        }
+
+        .btn-hint {
+            background-color: var(--primary-light);
+            color: white;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.95rem;
+            transition: background 0.3s;
+            margin-bottom: 0.5rem;
+        }
+
+        .btn-hint:hover {
+            background-color: var(--primary-color);
+        }
+
+        .hint-text {
+            display: none;
+            margin-top: 0.5rem;
+            padding: 1rem;
+            background-color: var(--hint-bg);
+            border-left: 4px solid var(--primary-color);
+            border-radius: 0 4px 4px 0;
+            color: var(--primary-color);
+            font-weight: 500;
+            margin-bottom: 1rem;
+        }
+
+        /* Vocabulary Section */
+        .vocab-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .vocab-card {
+            background: var(--white);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 1.5rem;
+            text-align: center;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        .vocab-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 5px 15px rgba(46, 125, 50, 0.15);
+        }
+
+        .word-zh {
+            font-size: 2rem;
+            font-weight: bold;
+            color: var(--primary-color);
+            margin: 0;
+        }
+
+        .word-pinyin {
+            font-size: 1.1rem;
+            color: #666;
+            margin: 0.5rem 0;
+            font-style: italic;
+        }
+
+        .word-vi {
+            font-size: 1.1rem;
+            font-weight: bold;
+            color: #333;
+            margin: 0.5rem 0;
+        }
+
+        .word-desc {
+            font-size: 0.95rem;
+            color: #555;
+            margin-top: 1rem;
+            border-top: 1px dashed var(--border-color);
+            padding-top: 1rem;
+            text-align: left;
+        }
+
+        /* Exercise Section */
+        .exercise-section {
+            margin-bottom: 3rem;
+        }
+        
+        .exercise-section h3 {
+            color: var(--primary-color);
+            border-bottom: 2px solid var(--border-color);
+            padding-bottom: 0.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .grammar-item {
+            margin-bottom: 2rem;
+            padding-bottom: 1.5rem;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .grammar-item:last-child {
+            border-bottom: none;
+        }
+
+        .grammar-pattern {
+            font-size: 1.3rem;
+            font-weight: bold;
+            color: var(--primary-color);
+            margin-bottom: 0.5rem;
+        }
+
+        .grammar-example {
+            background: var(--hint-bg);
+            padding: 1rem;
+            border-radius: 4px;
+            margin-top: 1rem;
+        }
+
+        .grammar-exercise {
+            margin-top: 1rem;
+            padding-left: 1rem;
+            border-left: 3px solid #ccc;
+        }
+        
+        .grammar-exercise p {
+            margin: 0.8rem 0;
+            font-size: 1.1rem;
+        }
+
+        /* Student Info Form */
+        .student-info {
+            background: var(--hint-bg);
+            padding: 1.5rem;
+            border-radius: 8px;
+            border: 1px solid var(--border-color);
+            margin-bottom: 2rem;
+        }
+
+        .student-info h3 {
+            margin-top: 0;
+            color: var(--primary-color);
+            border-bottom: none;
+        }
+
+        .student-inputs {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .student-inputs input {
+            padding: 0.8rem;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            font-size: 1rem;
+        }
+
+        /* Recording UI Styles */
+        .recording-ui {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-top: 8px;
+            margin-bottom: 1.5rem;
+            padding: 8px 12px;
+            background: #f9f9f9;
+            border-radius: 6px;
+            border: 1px dashed #ccc;
+            flex-wrap: wrap;
+        }
+
+        .btn-record {
+            background-color: var(--primary-light);
+            color: white;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .btn-record:hover {
+            background-color: var(--primary-color);
+        }
+
+        .btn-record.recording {
+            background-color: #d32f2f;
+            animation: pulse 1.5s infinite;
+        }
+
+        .btn-master-download {
+            background-color: #1976d2;
+            color: white;
+            border: none;
+            padding: 1rem 2rem;
+            border-radius: 8px;
+            font-size: 1.2rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background 0.3s;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+
+        .btn-master-download:hover {
+            background-color: #1565c0;
+        }
+
+        .recording-status {
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: #d32f2f;
+        }
+
+        .audio-playback {
+            height: 35px;
+            outline: none;
+        }
+
+        @keyframes pulse {
+            0% { box-shadow: 0 0 0 0 rgba(211, 47, 47, 0.4); }
+            70% { box-shadow: 0 0 0 10px rgba(211, 47, 47, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(211, 47, 47, 0); }
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>第一课：还我们一个良好的生态环境</h1>
+        <h2>Bài 1: Trả lại cho chúng ta một môi trường sinh thái tốt đẹp</h2>
+    </header>
+
+    <div class="container">
+        <!-- Tabs Navigation -->
+        <div class="tabs">
+            <button class="tab-btn active" onclick="openTab('vocabulary')">Từ vựng</button>
+            <button class="tab-btn" onclick="openTab('reading')">Bài khóa</button>
+            <button class="tab-btn" onclick="openTab('comprehension')">Đọc hiểu</button>
+            <button class="tab-btn" onclick="openTab('exercises')">Luyện tập</button>
+        </div>
+
+        <!-- Tab 1: Từ vựng -->
+        <div id="vocabulary" class="tab-content active">
+            <div class="vocab-grid">
+                <div class="vocab-card">
+                    <p class="word-zh">生态</p>
+                    <p class="word-pinyin">shēngtài</p>
+                    <p class="word-vi">Sinh thái</p>
+                    <div class="word-desc">指生物在一定自然环境下生存和发展的状态。</div>
+                </div>
+                <div class="vocab-card">
+                    <p class="word-zh">肆意</p>
+                    <p class="word-pinyin">sìyì</p>
+                    <p class="word-vi">Tùy ý, bừa bãi</p>
+                    <div class="word-desc">不顾一切，由着自己的心意去做。</div>
+                </div>
+                <div class="vocab-card">
+                    <p class="word-zh">举手之劳</p>
+                    <p class="word-pinyin">jǔshǒuzhīláo</p>
+                    <p class="word-vi">Việc nhỏ nhặt dễ làm</p>
+                    <div class="word-desc">形容事情很容易办到；不费事。</div>
+                </div>
+                <div class="vocab-card">
+                    <p class="word-zh">积德行善</p>
+                    <p class="word-pinyin">jīdéxíngshàn</p>
+                    <p class="word-vi">Tích đức hành thiện</p>
+                    <div class="word-desc">做好事，积累善良的行为。</div>
+                </div>
+                <div class="vocab-card">
+                    <p class="word-zh">藏污纳垢</p>
+                    <p class="word-pinyin">cángwūnàgòu</p>
+                    <p class="word-vi">Chứa chấp dơ bẩn/xấu xa</p>
+                    <div class="word-desc">隐藏了很多不干净的东西，比喻包容坏人坏事。</div>
+                </div>
+                <div class="vocab-card">
+                    <p class="word-zh">隐患</p>
+                    <p class="word-pinyin">yǐnhuàn</p>
+                    <p class="word-vi">Mối họa ngầm</p>
+                    <div class="word-desc">隐藏着的危险或祸患。</div>
+                </div>
+                <div class="vocab-card">
+                    <p class="word-zh">乐土</p>
+                    <p class="word-pinyin">lètǔ</p>
+                    <p class="word-vi">Vùng đất vui vẻ/hạnh phúc</p>
+                    <div class="word-desc">快乐幸福的地方。</div>
+                </div>
+                <div class="vocab-card">
+                    <p class="word-zh">无止境</p>
+                    <p class="word-pinyin">wúzhǐjìng</p>
+                    <p class="word-vi">Không có giới hạn</p>
+                    <div class="word-desc">（学习、研究等）没有尽头。</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Tab 2: Bài khóa -->
+        <div id="reading" class="tab-content">
+            <div class="chinese-text">
+                <h3 style="text-align: center; color: var(--primary-color);">生活中的生态观</h3>
+                
+                <div class="reading-paragraph">
+                    <div class="speaker-name">朱立波，男，40岁，设计师</div>
+                    <p>作为设计师，我非常清楚地感觉到，近几年来，客人在找我们做设计时，都提出了关于生态的要求，也就是说他们都在一定程度上重视起了家居环境的健康。以前的人总是认为只要是贵的就是好的，可是却不知道所选用的材料对于整个家居环境来说却有可能是一种污染。现在随着媒体对于环保的勤于报道，越来越多的消费者已经认识到环保的问题，提出了“只买对的，不买贵的”的口号。所以我们尽可能在设计时既考虑到顾客对居室整体布局以及选材上的偏好，又将生态的概念融入其中。其目的就是在体现居室现代、简洁、明快风格的同时，又最大限度地达到生态家居的要求。顾客在看到之后也非常满意。</p>
+                </div>
+
+                <div class="reading-paragraph">
+                    <div class="speaker-name">孙洪方，女，45岁，教师</div>
+                    <p>近几年的全球气温变暖、沙尘暴愈演愈烈、全球荒漠化愈发严重等种种状况其实都是自然界对于人类破坏环境进行的报复。人类肆意地砍伐森林；随地乱扔垃圾，特别是一些有害性较强的垃圾；大街上马达轰鸣，浓烟滚滚。这些都是不经意间发生的事，却给环境留下了永久的灾难。其实很多都是举手之劳的小事，只要每个人对于自己的生活方式加以约束，对己对人都是件积德行善的事。我现在所居住的小区，严格实行垃圾分类回收，同时小区绿化带还特设了多处垃圾袋，以方便宠物粪便的清理。这些看似小事，可是却人性化地体现了对于环境的保护，值得提倡和推广。</p>
+                </div>
+
+                <div class="reading-paragraph">
+                    <div class="speaker-name">薛玲娇，女，38岁，公务员</div>
+                    <p>工作和休闲娱乐共同构成了完整的生活，而工作往往占据了较大的比重。一个人一天当中，呆在办公室的时间要超过1/3，因此办公室内的生态环境和空气质量的提高显得尤为重要。然而人们总是比较关心居住的生态环境，而忽略了办公室的环境改善，这一点恰恰又是最关键的。如今在办公楼里大量使用的中央空调往往是大楼藏污纳垢之处，传统的空调系统总是存在一些隐患，诸如细菌、高能耗和臭氧层的破坏。这些隐患非常不利于整个生态环境和个人的身心健康。所以人们迫切希望一套高效的、环保的、节能的、健康的新型空调系统，不但能够保持身体健康，更能够减少臭氧层的破坏，真正实现一个健康、自然、节能的办公环境。</p>
+                </div>
+
+                <div class="reading-paragraph">
+                    <div class="speaker-name">李俊杰，男，41岁，环保工作人员</div>
+                    <p>美好的生态环境是人人向往的生活乐土，可是人类的破坏能力却使我们越来越背离这个理想的梦中家园。我们的森林正日益减少，空气失去了往日的芬芳，一个个物种从这个地球灭绝，所有的一切皆因为人们无止境的经济欲望和缺乏生态意识。因此要创造生态型的生活，说到底是要培育一颗“生态”的心。只有当每个人都有了强烈的环保意识，无时无刻都能自觉地去维护身边的环境，哪怕小到一张废纸一个烟头都不会任意丢弃，我们现在为保护生态所做的一切才是切实有效的，我们才能真正享受到生态的生活。</p>
+                </div>
+
+                <div class="reading-paragraph">
+                    <div class="speaker-name">结语</div>
+                    <p>政府、社会团体、房产开发商及其他力量正在为打造一个生态型的生活环境而努力，但是决定性的力量却是来自于我们每个普通大众，取决于我们是否有一颗“生态”的心。</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Tab 3: Đọc hiểu -->
+        <div id="comprehension" class="tab-content">
+            <p style="margin-bottom: 2rem; color: #666;">* Dựa vào nội dung bài khóa, hãy trả lời các câu hỏi sau. Nhấn vào nút để xem từ khóa gợi ý.</p>
+            
+            <div class="question-card">
+                <div class="question-text">1. 设计师朱立波指出，现在的消费者在选择家居时提出了什么口号？</div>
+                <button class="btn-hint" onclick="toggleHint('hint1')">Xem gợi ý</button>
+                <div id="hint1" class="hint-text">
+                    💡 提示：只买对的，不买贵的
+                </div>
+            </div>
+
+            <div class="question-card">
+                <div class="question-text">2. 孙洪方认为人类的哪些行为破坏了环境？请列举出来。</div>
+                <button class="btn-hint" onclick="toggleHint('hint2')">Xem gợi ý</button>
+                <div id="hint2" class="hint-text">
+                    💡 提示：砍伐森林、乱扔垃圾、马达轰鸣、浓烟滚滚
+                </div>
+            </div>
+
+            <div class="question-card">
+                <div class="question-text">3. 薛玲娇为什么认为办公室的环境改善最关键？传统的中央空调有什么隐患？</div>
+                <button class="btn-hint" onclick="toggleHint('hint3')">Xem gợi ý</button>
+                <div id="hint3" class="hint-text">
+                    💡 提示：超过1/3的时间 / 藏污纳垢、细菌、高能耗、破坏臭氧层
+                </div>
+            </div>
+
+            <div class="question-card">
+                <div class="question-text">4. 李俊杰认为，真正享受到生态生活的前提（说到底）是什么？</div>
+                <button class="btn-hint" onclick="toggleHint('hint4')">Xem gợi ý</button>
+                <div id="hint4" class="hint-text">
+                    💡 提示：培育一颗“生态”的心 / 强烈的环保意识
+                </div>
+            </div>
+        </div>
+
+        <!-- Tab 4: Luyện tập (Gộp phần 1, 2, 3) -->
+        <div id="exercises" class="tab-content">
+            
+            <!-- Phần nhập thông tin học viên -->
+            <div class="student-info">
+                <h3>📋 Thông tin nộp bài (Vui lòng điền trước khi ghi âm)</h3>
+                <div class="student-inputs">
+                    <input type="text" id="studentSTT" placeholder="Nhập STT (VD: 01)" style="flex: 1; min-width: 120px;">
+                    <input type="text" id="studentName" placeholder="Nhập Họ và tên của bạn" style="flex: 3; min-width: 250px;">
+                </div>
+            </div>
+
+            <!-- PHẦN 1 -->
+            <div class="exercise-section">
+                <h3>一、用课文中的词语表达 (Dùng từ vựng trong bài để diễn đạt)</h3>
+                <div class="grammar-exercise">
+                    <p>1. 我家楼后有一个建筑工地，每天到了深夜还有很多车很响地开过来开过去。</p>
+                    <button class="btn-hint" onclick="toggleHint('hint_p1_1')">Xem gợi ý</button>
+                    <div id="hint_p1_1" class="hint-text">💡 提示：马达轰鸣</div>
+                    <div class="recording-ui">
+                        <button class="btn-record" onclick="toggleRecording(this, 'p1_1', 'I.1. 我家楼后有一个建筑工地...')">🎤 Ghi âm</button>
+                        <span class="recording-status"></span>
+                        <audio controls class="audio-playback" style="display: none;"></audio>
+                    </div>
+
+                    <p>2. 昨天山上起火了，烟冒得很厉害，看来火势挺猛的。</p>
+                    <button class="btn-hint" onclick="toggleHint('hint_p1_2')">Xem gợi ý</button>
+                    <div id="hint_p1_2" class="hint-text">💡 提示：浓烟滚滚</div>
+                    <div class="recording-ui">
+                        <button class="btn-record" onclick="toggleRecording(this, 'p1_2', 'I.2. 昨天山上起火了...')">🎤 Ghi âm</button>
+                        <span class="recording-status"></span>
+                        <audio controls class="audio-playback" style="display: none;"></audio>
+                    </div>
+
+                    <p>3. 谈恋爱的时候男孩子随便说了一句话，女朋友就可能生气。</p>
+                    <button class="btn-hint" onclick="toggleHint('hint_p1_3')">Xem gợi ý</button>
+                    <div id="hint_p1_3" class="hint-text">💡 提示：不经意间</div>
+                    <div class="recording-ui">
+                        <button class="btn-record" onclick="toggleRecording(this, 'p1_3', 'I.3. 谈恋爱的时候男孩子随便说了一句话...')">🎤 Ghi âm</button>
+                        <span class="recording-status"></span>
+                        <audio controls class="audio-playback" style="display: none;"></audio>
+                    </div>
+
+                    <p>4. 帮老人拿一下行李对我来说是很小的事，不值得一提。</p>
+                    <button class="btn-hint" onclick="toggleHint('hint_p1_4')">Xem gợi ý</button>
+                    <div id="hint_p1_4" class="hint-text">💡 提示：举手之劳</div>
+                    <div class="recording-ui">
+                        <button class="btn-record" onclick="toggleRecording(this, 'p1_4', 'I.4. 帮老人拿一下行李对我来说是很小的事...')">🎤 Ghi âm</button>
+                        <span class="recording-status"></span>
+                        <audio controls class="audio-playback" style="display: none;"></audio>
+                    </div>
+
+                    <p>5. 我觉得人应该多做点好事，这样将来你可能有好的回报。</p>
+                    <button class="btn-hint" onclick="toggleHint('hint_p1_5')">Xem gợi ý</button>
+                    <div id="hint_p1_5" class="hint-text">💡 提示：积德行善</div>
+                    <div class="recording-ui">
+                        <button class="btn-record" onclick="toggleRecording(this, 'p1_5', 'I.5. 我觉得人应该多做点好事...')">🎤 Ghi âm</button>
+                        <span class="recording-status"></span>
+                        <audio controls class="audio-playback" style="display: none;"></audio>
+                    </div>
+
+                    <p>6. 今天我要彻底大扫除，把屋子里的角角落落最容易脏的地方打扫干净。</p>
+                    <button class="btn-hint" onclick="toggleHint('hint_p1_6')">Xem gợi ý</button>
+                    <div id="hint_p1_6" class="hint-text">💡 提示：藏污纳垢</div>
+                    <div class="recording-ui">
+                        <button class="btn-record" onclick="toggleRecording(this, 'p1_6', 'I.6. 今天我要彻底大扫除...')">🎤 Ghi âm</button>
+                        <span class="recording-status"></span>
+                        <audio controls class="audio-playback" style="display: none;"></audio>
+                    </div>
+                </div>
+            </div>
+
+            <!-- PHẦN 2 -->
+            <div class="exercise-section">
+                <h3>二、用课文中的句型表达 (Dùng mẫu câu trong bài để diễn đạt)</h3>
+                
+                <div class="grammar-item">
+                    <div class="grammar-pattern">1. 只买......的，不买......的</div>
+                    <div class="grammar-exercise">
+                        <p>(1) 我的朋友很有钱，他专拣贵的东西买，便宜的一概不要。<br>➔ <em>Hãy ghi âm câu trả lời của bạn:</em></p>
+                        <div class="recording-ui">
+                            <button class="btn-record" onclick="toggleRecording(this, 'ex1_1', 'II.1.(1) 我的朋友很有钱，他专拣贵的东西买...')">🎤 Ghi âm</button>
+                            <span class="recording-status"></span>
+                            <audio controls class="audio-playback" style="display: none;"></audio>
+                        </div>
+                        <p>(2) 有的人买东西的时候总是买便宜货，不便宜的即使很好也不买。<br>➔ <em>Hãy ghi âm câu trả lời của bạn:</em></p>
+                        <div class="recording-ui">
+                            <button class="btn-record" onclick="toggleRecording(this, 'ex1_2', 'II.1.(2) 有的人买东西的时候总是买便宜货...')">🎤 Ghi âm</button>
+                            <span class="recording-status"></span>
+                            <audio controls class="audio-playback" style="display: none;"></audio>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="grammar-item">
+                    <div class="grammar-pattern">2. 既......又......，其目的是......</div>
+                    <div class="grammar-exercise">
+                        <p>(1) 他为了保持好的身体状态常常去健身房锻炼或去游泳池游泳。<br>➔ <em>Hãy ghi âm câu trả lời của bạn:</em></p>
+                        <div class="recording-ui">
+                            <button class="btn-record" onclick="toggleRecording(this, 'ex2_1', 'II.2.(1) 他为了保持好的身体状态常常去健身房锻炼...')">🎤 Ghi âm</button>
+                            <span class="recording-status"></span>
+                            <audio controls class="audio-playback" style="display: none;"></audio>
+                        </div>
+                        <p>(2) 我们工厂为了扩大产品影响又抓质量又做广告。<br>➔ <em>Hãy ghi âm câu trả lời của bạn:</em></p>
+                        <div class="recording-ui">
+                            <button class="btn-record" onclick="toggleRecording(this, 'ex2_2', 'II.2.(2) 我们工厂为了扩大产品影响又抓质量又做广告。')">🎤 Ghi âm</button>
+                            <span class="recording-status"></span>
+                            <audio controls class="audio-playback" style="display: none;"></audio>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="grammar-item">
+                    <div class="grammar-pattern">3. 看似......，可（却）......</div>
+                    <div class="grammar-exercise">
+                        <p>(1) 大家都觉得他老实，其实他挺坏的。<br>➔ <em>Hãy ghi âm câu trả lời của bạn:</em></p>
+                        <div class="recording-ui">
+                            <button class="btn-record" onclick="toggleRecording(this, 'ex3_1', 'II.3.(1) 大家都觉得他老实，其实他挺坏的。')">🎤 Ghi âm</button>
+                            <span class="recording-status"></span>
+                            <audio controls class="audio-playback" style="display: none;"></audio>
+                        </div>
+                        <p>(2) 他买的那条裤子看起来质量不错，穿了一天就坏了。<br>➔ <em>Hãy ghi âm câu trả lời của bạn:</em></p>
+                        <div class="recording-ui">
+                            <button class="btn-record" onclick="toggleRecording(this, 'ex3_2', 'II.3.(2) 他买的那条裤子看起来质量不错，穿了一天就坏了。')">🎤 Ghi âm</button>
+                            <span class="recording-status"></span>
+                            <audio controls class="audio-playback" style="display: none;"></audio>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="grammar-item">
+                    <div class="grammar-pattern">4. 要......，说到底是要......</div>
+                    <div class="grammar-exercise">
+                        <p>(1) 要想真正地提高知识水平，最根本的就是多看书。<br>➔ <em>Hãy ghi âm câu trả lời của bạn:</em></p>
+                        <div class="recording-ui">
+                            <button class="btn-record" onclick="toggleRecording(this, 'ex4_1', 'II.4.(1) 要想真正地提高知识水平，最根本的就是多看书。')">🎤 Ghi âm</button>
+                            <span class="recording-status"></span>
+                            <audio controls class="audio-playback" style="display: none;"></audio>
+                        </div>
+                        <p>(2) 你想让他改变，其实这说明你对他并不满意。<br>➔ <em>Hãy ghi âm câu trả lời của bạn:</em></p>
+                        <div class="recording-ui">
+                            <button class="btn-record" onclick="toggleRecording(this, 'ex4_2', 'II.4.(2) 你想让他改变，其实这说明你对他并不满意。')">🎤 Ghi âm</button>
+                            <span class="recording-status"></span>
+                            <audio controls class="audio-playback" style="display: none;"></audio>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- PHẦN 3 -->
+            <div class="exercise-section">
+                <h3>三、思考与讨论 (Suy nghĩ và thảo luận)</h3>
+                <div class="grammar-exercise">
+                    <p>1. 请你说一说你理想的生态环境是什么样的。</p>
+                    <button class="btn-hint" onclick="toggleHint('hint_p3_1')">Xem từ vựng gợi ý</button>
+                    <div id="hint_p3_1" class="hint-text">💡 词语提示：乐土 (vùng đất vui vẻ/hạnh phúc)，绿化带 (vành đai xanh)，空气清新 (không khí trong lành)</div>
+                    <div class="recording-ui">
+                        <button class="btn-record" onclick="toggleRecording(this, 'p3_1', 'III.1. 请你说一说你理想的生态环境是什么样的。')">🎤 Ghi âm</button>
+                        <span class="recording-status"></span>
+                        <audio controls class="audio-playback" style="display: none;"></audio>
+                    </div>
+
+                    <p>2. 在保护环境方面你觉得人们说的和做的哪些是不一致的？</p>
+                    <button class="btn-hint" onclick="toggleHint('hint_p3_2')">Xem từ vựng gợi ý</button>
+                    <div id="hint_p3_2" class="hint-text">💡 词语提示：肆意砍伐 (chặt phá bừa bãi)，乱扔垃圾 (vứt rác bừa bãi)，缺乏生态意识 (thiếu ý thức sinh thái)</div>
+                    <div class="recording-ui">
+                        <button class="btn-record" onclick="toggleRecording(this, 'p3_2', 'III.2. 在保护环境方面你觉得人们说的和做的哪些是不一致的？')">🎤 Ghi âm</button>
+                        <span class="recording-status"></span>
+                        <audio controls class="audio-playback" style="display: none;"></audio>
+                    </div>
+
+                    <p>3. 在生活小事上怎么可以保护环境？</p>
+                    <button class="btn-hint" onclick="toggleHint('hint_p3_3')">Xem từ vựng gợi ý</button>
+                    <div id="hint_p3_3" class="hint-text">💡 词语提示：举手之劳 (việc nhỏ nhặt dễ làm)，积德行善 (tích đức hành thiện)，不任意丢弃 (không vứt bừa bãi)</div>
+                    <div class="recording-ui">
+                        <button class="btn-record" onclick="toggleRecording(this, 'p3_3', 'III.3. 在生活小事上怎么可以保护环境？')">🎤 Ghi âm</button>
+                        <span class="recording-status"></span>
+                        <audio controls class="audio-playback" style="display: none;"></audio>
+                    </div>
+
+                    <p>4. 你觉得怎么才可以减少垃圾量？</p>
+                    <button class="btn-hint" onclick="toggleHint('hint_p3_4')">Xem từ vựng gợi ý</button>
+                    <div id="hint_p3_4" class="hint-text">💡 词语提示：垃圾分类回收 (phân loại thu hồi rác)，提倡和推广 (đề xướng và nhân rộng)，环保袋 (túi thân thiện môi trường)</div>
+                    <div class="recording-ui">
+                        <button class="btn-record" onclick="toggleRecording(this, 'p3_4', 'III.4. 你觉得怎么才可以减少垃圾量？')">🎤 Ghi âm</button>
+                        <span class="recording-status"></span>
+                        <audio controls class="audio-playback" style="display: none;"></audio>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Master Download Button -->
+            <div style="text-align: center; margin-top: 3rem; padding-top: 2rem; border-top: 2px dashed var(--border-color);">
+                <button class="btn-master-download" onclick="downloadAllAsHTML()">📥 Tải xuống Toàn bộ Bài nộp</button>
+                <p style="color: #666; font-size: 0.9rem; margin-top: 10px;">(Hệ thống sẽ gộp tất cả file ghi âm của bạn thành một file HTML duy nhất để nộp bài)</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Tab switching
+        function openTab(tabName) {
+            const tabContents = document.getElementsByClassName('tab-content');
+            for (let i = 0; i < tabContents.length; i++) {
+                tabContents[i].classList.remove('active');
+            }
+            const tabBtns = document.getElementsByClassName('tab-btn');
+            for (let i = 0; i < tabBtns.length; i++) {
+                tabBtns[i].classList.remove('active');
+            }
+            document.getElementById(tabName).classList.add('active');
+            event.currentTarget.classList.add('active');
+        }
+
+        // Hint toggling
+        function toggleHint(hintId) {
+            const hintElement = document.getElementById(hintId);
+            const btnElement = event.currentTarget;
+            if (hintElement.style.display === 'block') {
+                hintElement.style.display = 'none';
+                btnElement.textContent = btnElement.textContent.replace('Ẩn', 'Xem');
+            } else {
+                hintElement.style.display = 'block';
+                btnElement.textContent = btnElement.textContent.replace('Xem', 'Ẩn');
+            }
+        }
+
+        // Dữ liệu lưu trữ ghi âm
+        let recordingsMap = {}; 
+        let activeMediaRecorder = null;
+        let activeChunks = [];
+        let currentBtn = null;
+
+        async function toggleRecording(btn, qid, qtext) {
+            const container = btn.parentElement;
+            const status = container.querySelector('.recording-status');
+            const audioPlayback = container.querySelector('.audio-playback');
+
+            if (currentBtn && currentBtn !== btn && currentBtn.classList.contains('recording')) {
+                alert('Vui lòng dừng đoạn ghi âm hiện tại trước khi bắt đầu một đoạn mới.');
+                return;
+            }
+
+            if (btn.classList.contains('recording')) {
+                // Stop recording
+                if (activeMediaRecorder && activeMediaRecorder.state !== 'inactive') {
+                    activeMediaRecorder.stop();
+                }
+                btn.classList.remove('recording');
+                btn.innerHTML = '🎤 Ghi âm lại';
+                status.innerHTML = 'Đã lưu ✔️️';
+                currentBtn = null;
+            } else {
+                // Start recording
+                try {
+                    const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+                    activeMediaRecorder = new MediaRecorder(stream);
+                    activeChunks = [];
+                    currentBtn = btn;
+
+                    activeMediaRecorder.ondataavailable = e => {
+                        if (e.data.size > 0) activeChunks.push(e.data);
+                    };
+
+                    activeMediaRecorder.onstop = () => {
+                        const audioBlob = new Blob(activeChunks, { type: 'audio/webm' });
+                        const audioUrl = URL.createObjectURL(audioBlob);
+                        audioPlayback.src = audioUrl;
+                        audioPlayback.style.display = 'block';
+                        
+                        // Lưu vào map bộ nhớ
+                        recordingsMap[qid] = {
+                            blob: audioBlob,
+                            text: qtext
+                        };
+
+                        stream.getTracks().forEach(track => track.stop());
+                    };
+
+                    activeMediaRecorder.start();
+                    btn.classList.add('recording');
+                    btn.innerHTML = '⏹ Dừng';
+                    status.innerHTML = '🔴 Đang thu âm...';
+                    audioPlayback.style.display = 'none'; 
+
+                } catch (err) {
+                    alert('Trình duyệt không thể truy cập Microphone. Vui lòng cấp quyền cho trang web!');
+                    console.error(err);
+                }
+            }
+        }
+
+        // Chuyển Blob sang Base64
+        const blobToBase64 = (blob) => {
+            return new Promise((resolve, reject) => {
+                const reader = new FileReader();
+                reader.onloadend = () => resolve(reader.result);
+                reader.onerror = reject;
+                reader.readAsDataURL(blob);
+            });
+        };
+
+        // Gộp tất cả audio xuất file HTML nộp bài
+        async function downloadAllAsHTML() {
+            const stt = document.getElementById('studentSTT').value.trim();
+            const name = document.getElementById('studentName').value.trim();
+
+            if (!stt || !name) {
+                alert("Vui lòng nhập STT và Họ tên của bạn ở đầu trang trước khi tải bài nộp!");
+                document.getElementById('studentSTT').focus();
+                return;
+            }
+
+            const keys = Object.keys(recordingsMap);
+            if (keys.length === 0) {
+                alert("Bạn chưa ghi âm câu nào. Vui lòng ghi âm ít nhất 1 câu trước khi tải xuống.");
+                return;
+            }
+
+            // Tạo cấu trúc HTML cho file tải về
+            let htmlContent = `
+            <!DOCTYPE html>
+            <html lang="vi">
+            <head>
+                <meta charset="UTF-8">
+                <meta name="viewport" content="width=device-width, initial-scale=1.0">
+                <title>Bài nộp: ${stt} - ${name}</title>
+                <style>
+                    body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #f1f8e9; color: #333; padding: 2rem; }
+                    .container { max-width: 800px; margin: 0 auto; background: #fff; padding: 2rem; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
+                    h1 { color: #2e7d32; border-bottom: 2px solid #c8e6c9; padding-bottom: 10px; }
+                    .info-box { background: #e8f5e9; padding: 15px; border-radius: 5px; margin-bottom: 20px; border-left: 4px solid #2e7d32;}
+                    .info-box p { margin: 5px 0; font-size: 1.1rem; }
+                    .record-item { margin-bottom: 20px; padding: 15px; border: 1px solid #e0e0e0; border-radius: 6px; background: #fafafa;}
+                    .record-item p { margin-top: 0; font-weight: bold; color: #1565c0; }
+                    audio { width: 100%; height: 40px; margin-top: 10px; }
+                </style>
+            </head>
+            <body>
+                <div class="container">
+                    <h1>Chi tiết Bài nộp Khẩu ngữ</h1>
+                    <div class="info-box">
+                        <p><strong>STT:</strong> ${stt}</p>
+                        <p><strong>Họ và tên:</strong> ${name}</p>
+                        <p><strong>Số câu đã ghi âm:</strong> ${keys.length}</p>
+                    </div>
+                    <h2>Danh sách Audio:</h2>
+            `;
+
+            // Lặp qua từng ghi âm, chuyển sang Base64 và nhúng vào thẻ audio
+            for (let qid of keys) {
+                const data = recordingsMap[qid];
+                const base64Audio = await blobToBase64(data.blob);
+                htmlContent += `
+                    <div class="record-item">
+                        <p>${data.text}</p>
+                        <audio controls src="${base64Audio}"></audio>
+                    </div>
+                `;
+            }
+
+            htmlContent += `
+                </div>
+            </body>
+            </html>
+            `;
+
+            // Tạo Blob HTML và trigger tải xuống
+            const finalBlob = new Blob([htmlContent], { type: "text/html;charset=utf-8" });
+            const url = URL.createObjectURL(finalBlob);
+            const a = document.createElement('a');
+            a.href = url;
+            
+            // Format tên file không dấu/khoảng trắng dư
+            const safeName = name.replace(/\s+/g, '_');
+            a.download = `BaiNop_${stt}_${safeName}.html`;
+            
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+        }
+    </script>
+</body>
+</html>
